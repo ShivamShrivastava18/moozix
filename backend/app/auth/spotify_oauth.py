@@ -117,6 +117,12 @@ async def fetch_spotify_user(access_token: str) -> dict:
             SPOTIFY_ME_URL,
             headers={"Authorization": f"Bearer {access_token}"},
         )
+        if r.status_code != 200:
+            # Surface Spotify's actual error body to logs / response
+            import logging
+            logging.getLogger(__name__).error(
+                "Spotify /me failed: %s %s", r.status_code, r.text
+            )
         r.raise_for_status()
         return r.json()
 
