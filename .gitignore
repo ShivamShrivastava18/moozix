@@ -1,0 +1,38 @@
+# Personal Spotify export (PII) - never commit
+Spotify Account Data/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+.env
+
+# Data / DB
+backend/data/*.duckdb
+backend/data/*.duckdb.wal
+*.sqlite
+*.sqlite3
+
+# Tooling
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+
+# Frontend
+node_modules/
+dist/
+build/
+.vite/
+.next/
+.turbo/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+*.swp
