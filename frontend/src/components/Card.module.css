@@ -1,0 +1,71 @@
+.card {
+  border-radius: var(--radius-lg);
+  border: 1px solid transparent;
+  transition: transform 200ms ease, box-shadow 200ms ease;
+}
+
+.padded.size-sm {
+  padding: var(--space-md);
+}
+
+.padded.size-md {
+  padding: var(--space-lg);
+}
+
+.padded.size-lg {
+  padding: var(--space-xl);
+  border-radius: var(--radius-xl);
+}
+
+/* ---------- Tones ---------- */
+.tone-canvas {
+  background: var(--color-canvas);
+  border-color: var(--color-hairline);
+  color: var(--color-ink);
+}
+
+.tone-cream {
+  background: var(--color-surface-card);
+  color: var(--color-ink);
+}
+
+.tone-soft {
+  background: var(--color-surface-soft);
+  color: var(--color-ink);
+}
+
+.tone-pink {
+  background: var(--color-brand-pink);
+  color: var(--color-on-primary);
+  border-radius: var(--radius-xl);
+}
+
+.tone-teal {
+  background: var(--color-brand-teal);
+  color: var(--color-on-dark);
+  border-radius: var(--radius-xl);
+}
+
+.tone-lavender {
+  background: var(--color-brand-lavender);
+  color: var(--color-ink);
+  border-radius: var(--radius-xl);
+}
+
+.tone-peach {
+  background: var(--color-brand-peach);
+  color: var(--color-ink);
+  border-radius: var(--radius-xl);
+}
+
+.tone-ochre {
+  background: var(--color-brand-ochre);
+  color: var(--color-ink);
+  border-radius: var(--radius-xl);
+}
+
+.tone-mint {
+  background: var(--color-brand-mint);
+  color: var(--color-ink);
+  border-radius: var(--radius-xl);
+}

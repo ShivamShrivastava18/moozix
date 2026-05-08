@@ -1,0 +1,45 @@
+.pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.tone-default {
+  background: var(--color-surface-card);
+  color: var(--color-ink);
+}
+
+.tone-ink {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.tone-pink {
+  background: var(--color-brand-pink);
+  color: var(--color-on-primary);
+}
+
+.tone-teal {
+  background: var(--color-brand-teal);
+  color: var(--color-on-dark);
+}
+
+.tone-lavender {
+  background: var(--color-brand-lavender);
+  color: var(--color-ink);
+}
+
+.tone-ochre {
+  background: var(--color-brand-ochre);
+  color: var(--color-ink);
+}
+
+.tone-mint {
+  background: var(--color-brand-mint);
+  color: var(--color-ink);
+}

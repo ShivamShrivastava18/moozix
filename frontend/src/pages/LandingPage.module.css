@@ -1,0 +1,274 @@
+/* ============================================================
+ * LandingPage — Clay-system landing.
+ * Cream canvas anchor, hero with floating "score orb",
+ * 4 saturated method cards (pink / lavender / peach / teal).
+ * ============================================================ */
+
+/* ---------- Hero ---------- */
+.hero {
+  padding: 64px 0 96px;
+  background:
+    radial-gradient(
+      circle at 90% 10%,
+      rgba(255, 77, 139, 0.08),
+      transparent 40%
+    ),
+    radial-gradient(
+      circle at 10% 80%,
+      rgba(232, 185, 74, 0.08),
+      transparent 45%
+    ),
+    var(--color-canvas);
+}
+
+.heroInner {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: var(--space-xxl);
+  align-items: center;
+}
+
+@media (max-width: 980px) {
+  .heroInner {
+    grid-template-columns: 1fr;
+  }
+}
+
+.heroLeft {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.italic {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--color-brand-pink);
+}
+
+.lede {
+  max-width: 560px;
+  font-size: 18px;
+  color: var(--color-body-strong);
+}
+
+.ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-top: var(--space-xs);
+}
+
+.disclaimer {
+  margin-top: var(--space-md);
+}
+
+/* ---------- Hero right (score orb) ---------- */
+.heroRight {
+  position: relative;
+  min-height: 480px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 980px) {
+  .heroRight {
+    min-height: 360px;
+  }
+}
+
+.scoreOrb {
+  width: 360px;
+  height: 360px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 30% 25%, #ffffff 0%, transparent 35%),
+    conic-gradient(
+      from 200deg,
+      var(--color-brand-pink) 0deg,
+      var(--color-brand-ochre) 90deg,
+      var(--color-brand-mint) 180deg,
+      var(--color-brand-lavender) 260deg,
+      var(--color-brand-pink) 360deg
+    );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    0 12px 40px rgba(255, 77, 139, 0.18),
+    0 24px 80px rgba(184, 164, 237, 0.16);
+  animation: orbSpin 20s linear infinite;
+}
+
+@media (max-width: 980px) {
+  .scoreOrb {
+    width: 260px;
+    height: 260px;
+  }
+}
+
+@keyframes orbSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.scoreOrbInner {
+  width: 75%;
+  height: 75%;
+  border-radius: 50%;
+  background: var(--color-canvas);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xxs);
+  animation: orbSpin 20s linear infinite reverse;
+  box-shadow: inset 0 1px 2px rgba(10, 10, 10, 0.04);
+}
+
+.scoreNumber {
+  font-family: var(--font-display);
+  font-size: 96px;
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: var(--color-ink);
+}
+
+@media (max-width: 980px) {
+  .scoreNumber {
+    font-size: 72px;
+  }
+}
+
+.floatPill1,
+.floatPill2,
+.floatPill3 {
+  position: absolute;
+  filter: drop-shadow(0 6px 16px rgba(10, 10, 10, 0.08));
+}
+
+.floatPill1 {
+  top: 8%;
+  left: 0%;
+  animation: bob 6s ease-in-out infinite;
+}
+
+.floatPill2 {
+  bottom: 12%;
+  right: 4%;
+  animation: bob 7s ease-in-out infinite -2s;
+}
+
+.floatPill3 {
+  bottom: 30%;
+  left: -2%;
+  animation: bob 8s ease-in-out infinite -1s;
+}
+
+@keyframes bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* ---------- Methods section ---------- */
+.methods {
+  padding: var(--space-section) 0;
+}
+
+.methodsHead {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  max-width: 720px;
+  margin-bottom: var(--space-xxl);
+}
+
+.methodGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-lg);
+}
+
+@media (max-width: 760px) {
+  .methodGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.methodCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  min-height: 240px;
+}
+
+.methodBody {
+  margin-top: var(--space-xs);
+  color: inherit;
+  opacity: 0.92;
+  font-size: 15px;
+}
+
+/* ---------- Stack section ---------- */
+.stack {
+  padding: 0 0 var(--space-section);
+}
+
+.stackInner {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-md);
+}
+
+@media (max-width: 900px) {
+  .stackInner {
+    grid-template-columns: 1fr;
+  }
+}
+
+.stackCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+/* ---------- CTA band ---------- */
+.ctaBand {
+  padding: 0 0 var(--space-section);
+}
+
+.ctaCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xl);
+  padding: 64px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 760px) {
+  .ctaCard {
+    padding: 32px;
+  }
+}
+
+/* ---------- Footer ---------- */
+.footer {
+  background: var(--color-surface-soft);
+  padding: 64px 0;
+}
+
+.footerInner {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+}
