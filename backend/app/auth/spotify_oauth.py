@@ -127,17 +127,19 @@ def upsert_user(spotify_user: dict) -> str:
     user_id = spotify_user["id"]
     images = spotify_user.get("images") or []
     image_url = images[0]["url"] if images else None
+    now = datetime.now(timezone.utc)
     with cursor() as c:
         c.execute(
             """
-            INSERT INTO users (user_id, display_name, email, image_url, country)
-            VALUES (?, ?, ?, ?, ?)
+            INSERT INTO users
+                (user_id, display_name, email, image_url, country, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?)
             ON CONFLICT (user_id) DO UPDATE SET
                 display_name = excluded.display_name,
                 email        = excluded.email,
                 image_url    = excluded.image_url,
                 country      = excluded.country,
-                updated_at   = CURRENT_TIMESTAMP
+                updated_at   = excluded.updated_at
             """,
             [
                 user_id,
@@ -145,6 +147,7 @@ def upsert_user(spotify_user: dict) -> str:
                 spotify_user.get("email"),
                 image_url,
                 spotify_user.get("country"),
+                now,
             ],
         )
     return user_id
@@ -152,19 +155,20 @@ def upsert_user(spotify_user: dict) -> str:
 
 def store_tokens(user_id: str, token_response: dict) -> None:
     expires_in = int(token_response.get("expires_in", 3600))
-    expires_at = datetime.now(timezone.utc) + timedelta(seconds=expires_in - 30)
+    now = datetime.now(timezone.utc)
+    expires_at = now + timedelta(seconds=expires_in - 30)
     with cursor() as c:
         c.execute(
             """
             INSERT INTO oauth_tokens
-                (user_id, access_token, refresh_token, expires_at, scope)
-            VALUES (?, ?, ?, ?, ?)
+                (user_id, access_token, refresh_token, expires_at, scope, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?)
             ON CONFLICT (user_id) DO UPDATE SET
                 access_token  = excluded.access_token,
                 refresh_token = COALESCE(excluded.refresh_token, oauth_tokens.refresh_token),
                 expires_at    = excluded.expires_at,
                 scope         = excluded.scope,
-                updated_at    = CURRENT_TIMESTAMP
+                updated_at    = excluded.updated_at
             """,
             [
                 user_id,
@@ -172,6 +176,7 @@ def store_tokens(user_id: str, token_response: dict) -> None:
                 token_response.get("refresh_token"),
                 expires_at,
                 token_response.get("scope"),
+                now,
             ],
         )
 

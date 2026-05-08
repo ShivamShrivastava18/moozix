@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
-from datetime import datetime, timezone
+from datetime import datetime, timezone  # noqa: I001
 
 from ..db import cursor, from_json, to_json
 from ..schemas import (
@@ -46,16 +46,17 @@ def get_cached_comparison(user_a: str, user_b: str) -> CompatibilityResult | Non
 
 def save_comparison(result: CompatibilityResult) -> None:
     a, b = _pair_key(result.user_a.user_id, result.user_b.user_id)
+    now = datetime.now(timezone.utc)
     with cursor() as c:
         c.execute(
             """
             INSERT INTO comparisons (user_a, user_b, result_json, computed_at)
-            VALUES (?, ?, ?, CURRENT_TIMESTAMP)
+            VALUES (?, ?, ?, ?)
             ON CONFLICT (user_a, user_b) DO UPDATE SET
                 result_json = excluded.result_json,
-                computed_at = CURRENT_TIMESTAMP
+                computed_at = excluded.computed_at
             """,
-            [a, b, result.model_dump_json()],
+            [a, b, result.model_dump_json(), now],
         )
 
 

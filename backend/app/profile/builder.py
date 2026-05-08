@@ -179,16 +179,17 @@ async def build_taste_profile(user_id: str) -> TasteProfile:
 # ---------- Persistence ----------
 
 def save_profile(profile: TasteProfile) -> None:
+    now = datetime.now(timezone.utc)
     with cursor() as c:
         c.execute(
             """
             INSERT INTO taste_profiles (user_id, profile_json, built_at)
-            VALUES (?, ?, CURRENT_TIMESTAMP)
+            VALUES (?, ?, ?)
             ON CONFLICT (user_id) DO UPDATE SET
                 profile_json = excluded.profile_json,
-                built_at     = CURRENT_TIMESTAMP
+                built_at     = excluded.built_at
             """,
-            [profile.user.user_id, profile.model_dump_json()],
+            [profile.user.user_id, profile.model_dump_json(), now],
         )
 
 
