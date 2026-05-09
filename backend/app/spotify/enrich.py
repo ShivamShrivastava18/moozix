@@ -253,7 +253,16 @@ async def enrich_artists(
     missing = [aid for aid in artist_ids if aid not in cached]
     if missing:
         log.info("Fetching info for %d artists", len(missing))
-        artists = await client.artists_batch(missing)
+        try:
+            artists = await client.artists_batch(missing)
+        except Exception as exc:  # noqa: BLE001
+            # Spotify also locked /v1/artists for new dev-mode apps. Skip
+            # enrichment; we still have top_artists data with genres from
+            # /me/top/artists which we use as the primary genre signal.
+            log.warning(
+                "artists_batch unavailable (%s); skipping artist enrichment", exc
+            )
+            return cached
         upsert_artists(artists)
         cached.update(get_cached_artists(missing))
     return cached
