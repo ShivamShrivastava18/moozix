@@ -139,7 +139,34 @@ async def enrich_tracks(
 
     if missing:
         log.info("Fetching audio features for %d tracks", len(missing))
-        features = await client.audio_features_batch(missing)
+        try:
+            features = await client.audio_features_batch(missing)
+        except Exception as exc:  # noqa: BLE001
+            # Spotify removed /v1/audio-features for new apps in Nov 2024.
+            # Degrade gracefully: persist track metadata only (no features).
+            log.warning(
+                "audio_features unavailable (%s); storing metadata only", exc
+            )
+            features = []
+            track_meta = {t["id"]: t for t in tracks if t.get("id")}
+            rows = []
+            for tid in missing:
+                meta = track_meta.get(tid, {})
+                artists = meta.get("artists") or []
+                row = {
+                    "track_id": tid,
+                    "name": meta.get("name"),
+                    "artist_ids": [a.get("id") for a in artists if a.get("id")],
+                    "artist_names": [a.get("name") for a in artists if a.get("name")],
+                    "popularity": meta.get("popularity"),
+                    "duration_ms": meta.get("duration_ms"),
+                }
+                for col in AUDIO_FEATURE_COLS:
+                    row[col] = None
+                rows.append(row)
+            upsert_track_features(rows)
+            cached.update({r["track_id"]: r for r in rows})
+            return cached
         # Merge with track metadata
         track_meta = {t["id"]: t for t in tracks if t.get("id")}
         rows = []

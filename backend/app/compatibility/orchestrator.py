@@ -83,11 +83,24 @@ async def compute_compatibility(
     if include_llm:
         llm = await compute_llm_report(profile_a, profile_b, overlap, embedding, audio)
 
-    overall = (
-        weights["overlap"] * overlap.score
-        + weights["embedding"] * embedding.score
-        + weights["audio_features"] * audio.score
+    # If audio fingerprint is unavailable for either user (Spotify removed
+    # /audio-features for new apps), redistribute its weight onto the others.
+    audio_available = (
+        profile_a.audio_fingerprint.sample_size > 0
+        and profile_b.audio_fingerprint.sample_size > 0
     )
+    if audio_available:
+        overall = (
+            weights["overlap"] * overlap.score
+            + weights["embedding"] * embedding.score
+            + weights["audio_features"] * audio.score
+        )
+    else:
+        # Renormalise overlap+embedding to sum to 1.0
+        ov_w = weights["overlap"]
+        em_w = weights["embedding"]
+        total = ov_w + em_w
+        overall = (ov_w / total) * overlap.score + (em_w / total) * embedding.score
     overall = round(min(100.0, max(0.0, overall)), 2)
 
     breakdown_summary = {
